@@ -18,8 +18,11 @@ import java.io.File
 import android.content.pm.PackageManager
 import android.graphics.ImageDecoder
 import android.os.Build
+import android.widget.RelativeLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import java.io.ByteArrayOutputStream
+import com.google.android.material.snackbar.Snackbar
 import android.content.Intent as Intent
 
 
@@ -31,6 +34,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var _editbutton:Button
     private lateinit var _getphotobutton:Button
     private lateinit var _imageview: ImageView
+    private var _mainLayout: RelativeLayout? = null
     private var _uri: Uri? = null
 
     private var cameraResultLauncher =
@@ -41,6 +45,7 @@ class MainActivity : AppCompatActivity() {
                 var file: File = File(getExternalFilesDir(null), "test.jpg")
                 var options: BitmapFactory.Options = BitmapFactory.Options()
                 var image: Bitmap = BitmapFactory.decodeFile(file.path, options)
+                pickedBitMap=image
                 _imageview.setImageBitmap(image)
             }
         }
@@ -60,6 +65,8 @@ class MainActivity : AppCompatActivity() {
         _getphotobutton = findViewById<Button>(R.id.getphoto)
         _imageview = findViewById<ImageView>(R.id.image)
         _editbutton = findViewById<Button>(R.id.editphoto)
+        _mainLayout = findViewById<RelativeLayout>(R.id.main_layout)
+
 
         _button.setOnClickListener(object : View.OnClickListener {
             override fun onClick(p0: View?) {
@@ -74,10 +81,21 @@ class MainActivity : AppCompatActivity() {
         })
 
         _editbutton.setOnClickListener{
-            var intent: Intent = Intent(this,EditActivity::class.java)
-            intent.putExtra("Image",_imageview)
-            _imageview.setDrawingCacheEnabled(true)
-            startActivity(intent)
+            if(pickedBitMap==null){
+                var snackBar: Snackbar = Snackbar.make(_mainLayout!!, "No Photo Picked", Snackbar.LENGTH_LONG)
+                snackBar.setAction("DISMISS", View.OnClickListener {
+                    snackBar.dismiss()
+                })
+                snackBar.show()
+            }
+            else {
+                var intent: Intent = Intent(this, EditActivity::class.java)
+                var stream = ByteArrayOutputStream();
+                pickedBitMap?.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+                var bytes = stream.toByteArray()
+                intent.putExtra("imageBitmap", bytes)
+                startActivity(intent)
+            }
         }
 
 

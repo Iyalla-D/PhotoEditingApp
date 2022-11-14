@@ -1,5 +1,6 @@
 package com.example.photoeditor
 
+import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
@@ -11,10 +12,12 @@ class EditActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit)
 
+
+
         _editimageview = findViewById<ImageView>(R.id.editimage)
-        val bundle: Bundle = intent.extras!!
-        val editimage: Int = bundle.getInt("Image")
-        _editimageview.setImageResource(editimage)
+        var bytes = intent.getByteArrayExtra("imageBitmap")
+        val bitmap = bytes?.let { BitmapFactory.decodeByteArray(bytes,0, it.size) }
+        _editimageview.setImageBitmap(bitmap)
     }
 
 
