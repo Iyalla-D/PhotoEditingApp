@@ -13,7 +13,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/textTest"/>
+
+    <ImageButton
+        android:id="@+id/checkmark"
+        android:layout_width="40dp"
+        android:layout_height="35dp"
+       android:layout_alignParentRight="true"
+        android:background="@drawable/purple_checked"
+         />
 
     <ImageView
         android:layout_width="match_parent"
@@ -23,4 +32,38 @@
         android:adjustViewBounds="true"
         android:id="@+id/editimage"
         />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:background="@drawable/tool_layout"
+        android:gravity="center"
+        android:layout_margin="10dp"
+        android:layout_alignParentBottom="true"
+        >
+
+
+        <ImageButton
+            android:src="@drawable/image_button_border"
+            android:layout_height="45dp"
+            android:layout_width="45dp"
+            android:padding="0dp"
+            android:id="@+id/drawButton"
+            android:background="@drawable/pen"
+            />
+
+        <ImageButton
+            android:id="@+id/rotateImageButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/rotate"
+            android:src="@drawable/image_button_border"
+
+            />
+
+    </LinearLayout>
+
+
+
 </RelativeLayout>

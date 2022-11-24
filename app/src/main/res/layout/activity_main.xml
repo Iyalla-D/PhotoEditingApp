@@ -17,15 +17,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Edit Photo"
-        android:id="@+id/editphoto"
-        android:textStyle="bold"
-        android:layout_above="@+id/image"
-        style="?android:attr/buttonBarButtonStyle" />
-
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -35,6 +26,16 @@
         android:adjustViewBounds="true"
         android:id="@+id/image"
         />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Edit Photo"
+        android:id="@+id/editphoto"
+        android:textStyle="bold"
+        android:layout_above="@+id/buttonLayout"
+        style="?android:attr/buttonBarButtonStyle" />
+
     <LinearLayout
         android:id="@+id/buttonLayout"
         android:layout_width="match_parent"
