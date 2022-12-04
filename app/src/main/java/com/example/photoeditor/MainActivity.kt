@@ -3,7 +3,6 @@ package com.example.photoeditor
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
@@ -26,12 +25,16 @@ import java.io.File
 
 @Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
+    companion object {
+        var dbManagerBase: DatabaseManger?= null
 
+    }
 
     private var pickedBitMap: Bitmap? = null
     private lateinit var _cameraButton:Button
     private lateinit var _editbutton:Button
     private lateinit var _getphotobutton:Button
+    private lateinit var _viewEdits:Button
     private lateinit var _imageview: ImageView
     private var _mainLayout: RelativeLayout? = null
     private var _uri: Uri? = null
@@ -57,19 +60,32 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        dbManagerBase = DatabaseManger(this)
+        try {
+            dbManagerBase!!.open()
+        }
+        catch (e: Exception){
+            e.stackTrace
+        }
 
-        val config: Configuration = resources.configuration
-        if(config.orientation == Configuration.ORIENTATION_PORTRAIT)
-            setContentView(R.layout.activity_main)
-        else if(config.orientation == Configuration.ORIENTATION_LANDSCAPE)
-            setContentView(R.layout.activity_main_landscape)
+
+        //val config: Configuration = resources.configuration
+        //if(config.orientation == Configuration.ORIENTATION_PORTRAIT)
+            //setContentView(R.layout.activity_main)
+        //else if(config.orientation == Configuration.ORIENTATION_LANDSCAPE)
+            //setContentView(R.layout.activity_main_landscape)
 
         _cameraButton = findViewById(R.id.camera)
         _getphotobutton = findViewById(R.id.getphoto)
         _imageview = findViewById(R.id.image)
         _editbutton = findViewById(R.id.editphoto)
+        _viewEdits = findViewById(R.id.viewEdits)
         _mainLayout = findViewById(R.id.main_layout)
 
+        _viewEdits.setOnClickListener{
+            val intent = Intent(this, VieweditsActivity::class.java)
+            startActivity(intent)
+        }
 
         _cameraButton.setOnClickListener { startCameraActivity() }
 
@@ -111,7 +127,7 @@ class MainActivity : AppCompatActivity() {
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
-        grantResults: IntArray
+        grantResults: IntArray,
     ) {
         if(requestCode==1){
             if(grantResults.isNotEmpty() && grantResults[0]==PackageManager.PERMISSION_GRANTED){

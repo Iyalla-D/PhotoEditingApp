@@ -2,12 +2,15 @@ package com.example.photoeditor
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.database.Cursor
 import android.graphics.*
 import android.net.Uri
 import android.os.Bundle
 import android.view.MotionEvent
+import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.drawToBitmap
 import yuku.ambilwarna.AmbilWarnaDialog
@@ -40,10 +43,13 @@ class EditActivity : AppCompatActivity() {
     private var sentPhoto: Uri? = null
     private var mDefaultColor = 0
 
-    @SuppressLint("ClickableViewAccessibility")
+
+    @SuppressLint("ClickableViewAccessibility", "Range")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit)
+        var dbManager= MainActivity.dbManagerBase
+
 
         mDefaultColor = 0
         sentPhoto = intent.data
@@ -53,6 +59,9 @@ class EditActivity : AppCompatActivity() {
         _drawingPen = findViewById(R.id.drawButton)
         _rotateImage = findViewById(R.id.rotateImageButton)
         _confirmImage = findViewById(R.id.checkmark)
+
+        var _testText = findViewById<TextView>(R.id.testText)
+        _testText.visibility=View.INVISIBLE
 
         _drawingPen.setOnClickListener {
             _editimageview.isEnabled = true
@@ -106,23 +115,20 @@ class EditActivity : AppCompatActivity() {
 
         _confirmImage.setOnClickListener{
             val intent = Intent(this, Save_ShareActivity::class.java)
+            MainActivity.dbManagerBase!!.insert(_editimageview.drawToBitmap())
+            var cursor: Cursor = dbManager!!.fetch()
+            if(cursor.moveToFirst()){
+                do{
+                    var text: String = cursor.getBlob(cursor.getColumnIndex(DatabaseHelper.Pictures)).toString()
+                    //_testText.text = text
+                }while (cursor.moveToNext())
+            }
             intent.data = getImageUri(_editimageview.drawToBitmap())
             startActivity(intent)
         }
     }
-    private fun getImageUri(inImage: Bitmap): Uri {
 
-        val tempFile = File.createTempFile("temp", ".png")
-        val bytes = ByteArrayOutputStream()
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-        val bitmapData = bytes.toByteArray()
 
-        val fileOutPut = FileOutputStream(tempFile)
-        fileOutPut.write(bitmapData)
-        fileOutPut.flush()
-        fileOutPut.close()
-        return Uri.fromFile(tempFile)
-    }
 
     private fun openColorPickerDialogue() {
         val colorPickerDialogue = AmbilWarnaDialog(this, mDefaultColor,
@@ -136,6 +142,22 @@ class EditActivity : AppCompatActivity() {
                 }
             })
         colorPickerDialogue.show()
+    }
+
+    companion object{
+        fun getImageUri(inImage: Bitmap): Uri {
+
+            val tempFile = File.createTempFile("temp", ".jpeg")
+            val bytes = ByteArrayOutputStream()
+            inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+            val bitmapData = bytes.toByteArray()
+
+            val fileOutPut = FileOutputStream(tempFile)
+            fileOutPut.write(bitmapData)
+            fileOutPut.flush()
+            fileOutPut.close()
+            return Uri.fromFile(tempFile)
+        }
     }
 }
 
