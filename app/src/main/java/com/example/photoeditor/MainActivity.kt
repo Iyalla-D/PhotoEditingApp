@@ -1,5 +1,6 @@
 package com.example.photoeditor
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -11,7 +12,8 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.widget.Button
+import android.view.View
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import androidx.activity.result.contract.ActivityResultContracts
@@ -26,15 +28,15 @@ import java.io.File
 @Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
     companion object {
+        @SuppressLint("StaticFieldLeak")
         var dbManagerBase: DatabaseManger?= null
-
     }
 
     private var pickedBitMap: Bitmap? = null
-    private lateinit var _cameraButton:Button
-    private lateinit var _editbutton:Button
-    private lateinit var _getphotobutton:Button
-    private lateinit var _viewEdits:Button
+    private lateinit var _cameraButton:ImageButton
+    private lateinit var _editbutton:ImageButton
+    private lateinit var _getphotobutton:ImageButton
+    private lateinit var _viewEdits:ImageButton
     private lateinit var _imageview: ImageView
     private var _mainLayout: RelativeLayout? = null
     private var _uri: Uri? = null
@@ -51,8 +53,10 @@ class MainActivity : AppCompatActivity() {
                 val matrix = Matrix()
                 matrix.postRotate(90F)
                 val rotated = Bitmap.createBitmap(image, 0, 0, image.width, image.height, matrix, true)
-                pickedBitMap=rotated
-                _imageview.setImageBitmap(rotated)
+                pickedBitMap = image
+                //pickedBitMap=rotated
+                _imageview.setImageBitmap(pickedBitMap)
+                _editbutton.visibility = View.VISIBLE
             }
         }
 
@@ -82,33 +86,44 @@ class MainActivity : AppCompatActivity() {
         _viewEdits = findViewById(R.id.viewEdits)
         _mainLayout = findViewById(R.id.main_layout)
 
+        _editbutton.visibility = View.INVISIBLE
+
         _viewEdits.setOnClickListener{
             val intent = Intent(this, VieweditsActivity::class.java)
             startActivity(intent)
         }
 
-        _cameraButton.setOnClickListener { startCameraActivity() }
+        _cameraButton.setOnClickListener {
+            startCameraActivity()
+        }
 
-        _getphotobutton.setOnClickListener { choosePhotoActivity() }
+        _getphotobutton.setOnClickListener {
+            choosePhotoActivity()
+        }
 
         _editbutton.setOnClickListener{
-            if(pickedBitMap==null){
-                val snackBar: Snackbar = Snackbar.make(_mainLayout!!, "No Photo Picked", Snackbar.LENGTH_LONG)
-                snackBar.setAction("DISMISS") {
-                    snackBar.dismiss()
-                }
-                snackBar.show()
+            editphoto()
+        }
+
+    }
+
+    private fun editphoto(){
+        if(pickedBitMap==null){
+            val snackBar: Snackbar = Snackbar.make(_mainLayout!!, "No Photo Picked", Snackbar.LENGTH_LONG)
+            snackBar.setAction("DISMISS") {
+                snackBar.dismiss()
             }
-            else {
-                val intent = Intent(this, EditActivity::class.java)
-                if(_uri != null){
-                    intent.data = _uri
-                    startActivity(intent)
-                }
-                else{
-                    intent.data = pickedPhoto
-                    startActivity(intent)
-                }
+            snackBar.show()
+        }
+        else {
+            val intent = Intent(this, EditActivity::class.java)
+            if(_uri != null){
+                intent.data = _uri
+                startActivity(intent)
+            }
+            else{
+                intent.data = pickedPhoto
+                startActivity(intent)
             }
         }
     }
@@ -154,6 +169,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+        _editbutton.visibility = View.VISIBLE
         super.onActivityResult(requestCode, resultCode, data)
     }
 

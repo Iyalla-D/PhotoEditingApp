@@ -9,7 +9,7 @@ import java.io.ByteArrayOutputStream
 
 class DatabaseManger(ctx:Context) {
     var context: Context? = ctx
-    var database: SQLiteDatabase? = null
+    private var database: SQLiteDatabase? = null
 
     fun open(): DatabaseManger {
         dbHelper = DatabaseHelper(context)
@@ -22,7 +22,7 @@ class DatabaseManger(ctx:Context) {
     }
 
     fun insert(bitmap: Bitmap){
-        var contentValues = ContentValues()
+        val contentValues = ContentValues()
         val stream = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
         val byteArray: ByteArray = stream.toByteArray()
@@ -33,8 +33,8 @@ class DatabaseManger(ctx:Context) {
 
 
     fun fetch(): Cursor{
-        var columns = arrayOf(DatabaseHelper.Picture_ID,DatabaseHelper.Pictures)
-        var cursor: Cursor = database!!.query(DatabaseHelper.Database_table,columns,null,null,null,null,null)
+        val columns = arrayOf(DatabaseHelper.Picture_ID,DatabaseHelper.Pictures)
+        val cursor: Cursor = database!!.query(DatabaseHelper.Database_table,columns,null,null,null,null,null)
         if(cursor!=null){
             cursor.moveToFirst()
         }
@@ -43,12 +43,12 @@ class DatabaseManger(ctx:Context) {
     }
 
     fun update(_id: Long, picture: ByteArray): Int {
-        var contentValues = ContentValues()
+        val contentValues = ContentValues()
         contentValues.put(DatabaseHelper.Pictures, picture)
         return database!!.update(DatabaseHelper.Database_table, contentValues, DatabaseHelper.Picture_ID+"="+_id, null)
     }
 
-    fun delete(_id: Int){
+    fun delete(_id: Long){
         database!!.delete(DatabaseHelper.Database_table,DatabaseHelper.Picture_ID+"="+_id, null)
     }
 

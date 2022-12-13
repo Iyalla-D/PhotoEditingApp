@@ -5,13 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".VieweditsActivity"
-    android:id="@+id/historyLayout">
+    android:id="@+id/historyLayout"
+    android:background="@color/black">
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Clear History"
-        android:id="@+id/deleteDatabase"/>
+        android:text="Clear"
+        android:id="@+id/deleteDatabase"
+        android:textColor="@color/black"
+        android:background="@drawable/roundedbutton"
+        android:layout_marginBottom="10dp"/>
     <TextView
         android:id="@+id/noImages"
         android:layout_width="wrap_content"
@@ -22,8 +26,9 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/imagesRV"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_below="@id/deleteDatabase"/>
+        android:layout_below="@id/deleteDatabase"
+        android:background="@color/black"/>
 
 </RelativeLayout>
