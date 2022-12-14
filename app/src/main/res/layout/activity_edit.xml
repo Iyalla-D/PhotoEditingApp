@@ -7,14 +7,10 @@
     tools:context=".EditActivity"
     android:background="@color/black">
 
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_below="@id/editimage"
         android:textSize="30sp"
         android:id="@+id/testText"/>
 
@@ -272,7 +268,9 @@
                     android:layout_height="110dp"
                     android:layout_gravity="center"
                     />
+
                 <TextView
+                    android:id="@+id/test"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="4dp"

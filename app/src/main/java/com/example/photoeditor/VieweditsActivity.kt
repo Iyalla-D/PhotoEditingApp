@@ -11,7 +11,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 
 
 class VieweditsActivity : AppCompatActivity() {
@@ -45,12 +44,6 @@ class VieweditsActivity : AppCompatActivity() {
                     MainActivity.dbManagerBase!!.delete(id)
                 }while (cursor.moveToNext())
             }
-
-            val snackBar: Snackbar = Snackbar.make(_historyLayout!!, "History Cleared", Snackbar.LENGTH_LONG)
-            snackBar.setAction("DISMISS") {
-                snackBar.dismiss()
-            }
-            snackBar.show()
 
             val refresh = Intent(this, VieweditsActivity::class.java)
             startActivity(refresh) //Start the same Activity

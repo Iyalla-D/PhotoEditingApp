@@ -125,8 +125,8 @@ class EditActivity : AppCompatActivity() {
         _editimageview.isEnabled = false
 
         _forwardButton.setOnClickListener{
-            //val emptyOrNot = bitmapArray.getOrElse(bitmapArrayCurrent+1){""}
-            //emptyOrNot.toString()!="null"
+            _zoomImage.visibility = View.INVISIBLE
+            _editimageview.visibility = View.VISIBLE
             if(bitmapArrayCurrent!=99&&bitmapArray[bitmapArrayCurrent+1].toString()!="null"){
                 _editimageview.setImageBitmap(bitmapArray[bitmapArrayCurrent+1])
                 bitmapArrayCurrent++
@@ -134,6 +134,8 @@ class EditActivity : AppCompatActivity() {
         }
 
         _backButton.setOnClickListener{
+            _zoomImage.visibility = View.INVISIBLE
+            _editimageview.visibility = View.VISIBLE
             if(bitmapArrayCurrent!=0){
                 _editimageview.setImageBitmap(bitmapArray[bitmapArrayCurrent-1])
                 bitmapArrayCurrent--
@@ -229,7 +231,6 @@ class EditActivity : AppCompatActivity() {
             }
             _zoomImage.visibility = View.INVISIBLE
             _editimageview.visibility = View.VISIBLE
-
             _editimageview.isEnabled = true
 
             _editimageview.setOnTouchListener { _, event ->
@@ -275,7 +276,6 @@ class EditActivity : AppCompatActivity() {
             }
             addToBitmapArray(_editimageview.drawToBitmap())
         }
-
 
         _rotateImage.setOnClickListener {
             _zoomImage.visibility = View.INVISIBLE
@@ -338,8 +338,6 @@ class EditActivity : AppCompatActivity() {
         }
     }
 
-
-
     private fun addToBitmapArray(bitmap: Bitmap){
         bitmapArray[bitmapArrayCount] = bitmap
         bitmapArrayCount++
@@ -367,7 +365,6 @@ class EditActivity : AppCompatActivity() {
                 invertedBitmap.setPixel(x, y, Color.rgb(invertedR, invertedG, invertedB))
             }
         }
-
         return invertedBitmap
     }
 
@@ -391,6 +388,7 @@ class EditActivity : AppCompatActivity() {
         // Return the resulting bitmap
         return result
     }
+
     private fun adjustChannel(channel: Int, contrast: Float): Int {
         // Clamp the contrast value to the range [-1, 1]
         val contrastClamped = contrast.coerceIn(-1f, 1f)
@@ -445,11 +443,9 @@ class EditActivity : AppCompatActivity() {
                 image.setPixel(x, y, pixel)
             }
         }
-
         // Return the modified image
         return image
     }
-
 
     private fun applyVintageFilter(bitmap: Bitmap):Bitmap {
         // Create a mutable copy of the input bitmap
@@ -469,7 +465,6 @@ class EditActivity : AppCompatActivity() {
         return result
     }
 
-
         private fun applyTintFilter(bitmap: Bitmap, color: Int):Bitmap {
         // Create a mutable copy of the input image
         val image = bitmap.copy(Bitmap.Config.ARGB_8888, true)
@@ -485,8 +480,6 @@ class EditActivity : AppCompatActivity() {
                 var pixel = image.getPixel(x, y)
 
                 val a = Color.alpha(pixel)
-
-
                 // Adjust the color of the pixel using the tint color provided
                 val hsv = floatArrayOf(0f, 0f, 0f)
                 Color.colorToHSV(pixel, hsv)
@@ -500,7 +493,6 @@ class EditActivity : AppCompatActivity() {
                 image.setPixel(x, y, pixel)
             }
         }
-
         // Return the modified image
         return image
     }
@@ -513,8 +505,6 @@ class EditActivity : AppCompatActivity() {
         val filterCanvas = Canvas(sixBitMap)
         filterCanvas.drawBitmap(sixBitMap,0f,0f,filterPaint)
     }
-
-
 
     private fun flipPhoto(photo: Bitmap): Bitmap {
         val matrix = Matrix()
@@ -538,5 +528,3 @@ class EditActivity : AppCompatActivity() {
         }
     }
 }
-
-    

@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageDecoder
-import android.graphics.Matrix
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -50,11 +49,7 @@ class MainActivity : AppCompatActivity() {
                 val file = File(getExternalFilesDir(null), "test.jpg")
                 val options: BitmapFactory.Options = BitmapFactory.Options()
                 val image: Bitmap = BitmapFactory.decodeFile(file.path, options)
-                val matrix = Matrix()
-                matrix.postRotate(90F)
-                val rotated = Bitmap.createBitmap(image, 0, 0, image.width, image.height, matrix, true)
                 pickedBitMap = image
-                //pickedBitMap=rotated
                 _imageview.setImageBitmap(pickedBitMap)
                 _editbutton.visibility = View.VISIBLE
             }
@@ -181,9 +176,4 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra(MediaStore.EXTRA_OUTPUT, _uri)
         cameraResultLauncher.launch(intent)
     }
-
 }
-
-
-
-
